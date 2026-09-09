@@ -1,97 +1,222 @@
-# 像素跑酷
+<p align="center">
+  <img src="assets/name.png" alt="像素跑酷" width="520">
+</p>
 
-## 项目简介
-- 一个既包含跑酷元素有拥有战斗系统的游戏，画风精美，音效有趣
-- A/D/W/S控制移动方向，W/K都能够实现跳跃，支持二段跳，J可以攻击
+<p align="center">
+  🎮 一款用 <b>C++ + EasyX</b> 编写的横版「跑酷 + 战斗」像素风小游戏
+</p>
 
-## 使用方法
-- 双击进入压缩包或解压后进入文件双击含游戏名文件，即可进入游戏
+---
 
-## 外部库
-- 使用在网上找到的透明贴图背景的函数库
-''' c
+## 📖 项目简介
+
+玩家将操控一位像素剑士，在 **持续向左涌来的浮空平台上** 奔跑、跳跃与战斗。你可以利用 **二段跳** 在平台间穿梭、用 **剑气** 远程消灭敌人、击碎障碍，同时要小心脚下——一旦掉出屏幕、撞上障碍或被敌人碰到，游戏就会立即结束。
+
+**跑得越久、杀敌越多，得分越高，难度也随之飙升**——随着奔跑时间与分数的增长，角色与地形都会不断加速，考验你的反应极限。
+
+> 🎬 **先看效果**：直接播放下方的演示视频，或下载 [可执行文件](<像素跑酷（点此进入）.exe>) 立即试玩。
+
+<video src="演示视频.mp4" controls="controls" style="width:100%;border-radius:8px;"></video>
+
+> 如果上方视频无法播放，可点击下载 [演示视频.mp4](演示视频.mp4)。
+
+---
+
+## ✨ 功能特色
+
+- **跑酷 + 战斗**双玩法：既要在平台间极限跳跃，又要随时应对敌人与障碍
+- **流畅的角色帧动画**：站立 / 奔跑 / 跳跃 / 攻击四种状态，左右双向贴图
+- **二段跳**：空中再按一次跳跃键可触发第二段跳，走位更灵活
+- **剑气攻击系统**：`J` 键朝面向方向发射剑气，远程消灭敌人、击碎障碍（场上剑气数量有限，不能无脑连发）
+- **两种 AI 敌人**：拥有独立移动逻辑与死亡动画，击杀可加分
+- **随机地图生成**：平台高度、间距、障碍分布每次开局均不同
+- **动态难度曲线**：角色移速随时间提升（封顶）、地形滚动速度随得分提升，越玩越刺激
+- **沉浸式音效**：主菜单 BGM、游戏 BGM、失败音效分段切换
+- **友好的游戏流程**：主菜单鼠标悬停 / 点击开始，死亡后可一键 `R` 重开
+
+---
+
+## 🎮 操作说明
+
+| 按键 | 功能 |
+| :--- | :--- |
+| `A` / `D`　或　`←` / `→` | 左右移动 |
+| `W` / `↑` / `K` | 跳跃（**支持二段跳**，空中再按一次） |
+| `S` / `↓` | 快速下跳（穿过脚下平台落到下方） |
+| `J` | 攻击——朝面向方向释放一道剑气 |
+| `R` | 游戏结束后重新开始（生成全新随机地图） |
+| `ESC` | 游戏中返回主菜单 / 在主菜单退出程序 |
+
+> 💡 **操作小贴士**：遇到高处平台时先用二段跳起跳，下落途中按 `S` 可以更快落台；敌人会沿平台巡逻，贴身攻击很危险，建议跳起后在空中朝敌人方向按 `J` 远程消耗。
+
+---
+
+## 📜 玩法规则
+
+- **得分来源**
+  - 生存奖励：奔跑过程中持续缓慢涨分
+  - 击杀敌人：剑气击中敌人 **+5 分**
+  - 击碎障碍：剑气摧毁障碍物 **+2 分**
+- **失败条件（一击即死，无血量）**
+  - ❌ 碰到障碍物
+  - ❌ 被敌人撞到
+  - ❌ 掉出屏幕底部
+- 游戏结束后按 `R` 可立刻重开一局，地图会重新随机生成
+
+---
+
+## 🚀 运行与体验
+
+### 方式一：直接试玩（推荐）
+
+1. 下载 [像素跑酷（点此进入）.exe](<像素跑酷（点此进入）.exe>)；
+2. **保持 `assets` 文件夹与 exe 位于同一目录**（游戏运行时会从 `assets/` 读取图片与音效素材）；
+3. 双击 exe 即可进入游戏。
+
+### 方式二：从源码编译运行
+
+游戏基于 **Visual Studio + EasyX 图形库** 开发，运行环境需为 Windows。
+
+1. 安装 [EasyX 图形库](https://easyx.cn/)（需与你的 VS 版本匹配）；
+2. 在 Visual Studio 中新建一个 C++ 项目，将 [`源代码.cpp`](源代码.cpp) 加入工程；
+3. 在 **与源代码.cpp 同一目录** 下新建 `tool.h`，内容见下方「外部库」；
+4. 将 `assets` 文件夹放到项目工作目录（exe 输出目录）；
+5. 编译运行即可。
+
+> 📝 **说明**：
+> - 音频通过 `winmm.lib`（`mciSendString`）播放，源码中已用 `#pragma comment` 自动链接，无需额外配置；若在 x64 下音乐无法播放，可尝试将平台切换为 **Win32(x86)** 编译。
+> - `源代码.cpp` 中的注释为 **GBK/ANSI 编码**。若在某些编辑器中显示为乱码，请以“简体中文(GB2312)”编码打开或另存该文件。
+
+---
+
+## 🧠 开发难点与解决方案
+
+| 难点 | 解决方案 |
+| :--- | :--- |
+| **只有单方向的动作精灵图**，无法直接左右翻转使用 | 手写透明贴图渲染，动态修正绘制起点与可见区域，实现左右双向朝向 |
+| **角色明明没有碰到障碍物 / 敌人，却触发了游戏结束** | 绘制可视化的碰撞盒辅助调试，直观观察碰撞区域，通过反复调整碰撞盒大小与检测偏移量来缩小误差 |
+| **用 `srand(time(NULL))` 生成的“随机”地图并不随机**——每次按 `R` 重开，地图都和第一次运行程序时一模一样 | 用「时间戳 + 程序累计运行时间」共同做随机种子：`srand((unsigned int)time(NULL) + clock())`，这样每次重开都能看到全新地图 |
+| **PNG 透明背景贴图时会出现黑色背景块**（EasyX 默认不支持透明 PNG） | 从网上找到并集成了按像素读取 Alpha 通道、手动实现透明混合的 `drawImg()` 函数库，并对左右边界、上下边界的裁切情况做了适配 |
+
+---
+
+## 📁 项目结构
+
+```
+像素跑酷/
+├── 📄 源代码.cpp                  主程序（约 1500 行，全部游戏逻辑）
+├── 🎮 像素跑酷（点此进入）.exe    已编译好的可执行文件（含完整素材即可直接游玩）
+├── 🎬 演示视频.mp4                游戏实录演示
+├── 📄 README.md                   项目说明（本文件）
+└── 📁 assets/                     素材资源
+    ├── 🖼️ bk1.png / bk2.png        主菜单背景 / 游戏内背景
+    ├── 🎨 角色精灵图               站立/奔跑/跳跃/攻击（左右双向）
+    ├── 👾 敌人与死亡动画           enemy1 / enemy2 及死亡帧
+    ├── ⚔️ 剑气特效                 swordbeam（左右双向）
+    ├── 🎵 音效                    menu_bgm.mp3 / game_bgm.mp3 / end.wav
+    └── 🖱️ UI 素材                 标题 name.png、开始按钮三态图
+```
+
+---
+
+## 🛠️ 技术栈
+
+- **语言 / 框架**：C / C++，[EasyX 图形库](https://easyx.cn/)
+- **渲染方式**：`BeginBatchDraw()` 批量绘制实现双缓冲，消除画面闪烁
+- **动画实现**：多帧精灵图轮播 + 自绘 Alpha 透明贴图（`tool.h`）
+- **音频播放**：Windows 多媒体库 `winmm`（`mciSendString`）
+- **程序组织**：结构体 + 函数式编程，状态机划分「主菜单 / 游戏进行中 / 游戏结束」
+
+---
+
+## 📦 外部库说明
+
+游戏使用了网上找到的**透明贴图函数库**：EasyX 默认不支持带透明通道的 PNG 直接贴图，下面的 `drawImg()` 会逐像素读取 Alpha 通道并手动混合。新建 `tool.h` 后把下面的代码粘贴进去即可：
+
+```c
 #pragma once
-#include<easyx.h>
+#include <easyx.h>
 
 void drawImg(int x, int y, IMAGE* src)
 {
-	// 变量初始化
-	DWORD* pwin = GetImageBuffer();			//窗口缓冲区指针
-	DWORD* psrc = GetImageBuffer(src);		//图片缓冲区指针
-	int win_w = getwidth();				//窗口宽高
-	int win_h = getheight();
-	int src_w = src->getwidth();				//图片宽高
-	int src_h = src->getheight();
+    // 变量初始化
+    DWORD* pwin = GetImageBuffer();			// 窗口缓冲区指针
+    DWORD* psrc = GetImageBuffer(src);		// 图片缓冲区指针
+    int win_w = getwidth();				// 窗口宽高
+    int win_h = getheight();
+    int src_w = src->getwidth();			// 图片宽高
+    int src_h = src->getheight();
 
-	// 计算贴图的实际长宽
-	int real_w = (x + src_w > win_w) ? win_w - x : src_w;			// 处理超出右边界
-	int real_h = (y + src_h > win_h) ? win_h - y : src_h;			// 处理超出下边界
-	if (x < 0) { psrc += -x;			real_w -= -x;	x = 0; }	// 处理超出左边界
-	if (y < 0) { psrc += (src_w * -y);	real_h -= -y;	y = 0; }	// 处理超出上边界
+    // 计算贴图的实际长宽
+    int real_w = (x + src_w > win_w) ? win_w - x : src_w;	// 处理超出右边界
+    int real_h = (y + src_h > win_h) ? win_h - y : src_h;	// 处理超出下边界
+    if (x < 0) { psrc += -x;         real_w -= -x; x = 0; }	// 处理超出左边界
+    if (y < 0) { psrc += (src_w * -y); real_h -= -y; y = 0; }	// 处理超出上边界
 
+    // 修正贴图起始位置
+    pwin += (win_w * y + x);
 
-	// 修正贴图起始位置
-	pwin += (win_w * y + x);
-
-	// 实现透明贴图
-	for (int iy = 0; iy < real_h; iy++)
-	{
-		for (int ix = 0; ix < real_w; ix++)
-		{
-			byte a = (byte)(psrc[ix] >> 24);//计算透明通道的值[0,256) 0为完全透明 255为完全不透明
-			if (a > 100)
-			{
-				pwin[ix] = psrc[ix];
-			}
-		}
-		//换到下一行
-		pwin += win_w;
-		psrc += src_w;
-	}
+    // 实现透明贴图
+    for (int iy = 0; iy < real_h; iy++)
+    {
+        for (int ix = 0; ix < real_w; ix++)
+        {
+            byte a = (byte)(psrc[ix] >> 24);	// 计算透明通道的值 [0,256)，0 为完全透明，255 为完全不透明
+            if (a > 100)
+            {
+                pwin[ix] = psrc[ix];
+            }
+        }
+        pwin += win_w;	// 换到下一行
+        psrc += src_w;
+    }
 }
 
 void drawImg(int x, int y, int dstW, int dstH, IMAGE* src, int srcX, int srcY)
 {
-	// 变量初始化
-	DWORD* pwin = GetImageBuffer();			//窗口缓冲区指针
-	DWORD* psrc = GetImageBuffer(src);		//图片缓冲区指针
-	int win_w = getwidth();				//窗口宽高
-	int win_h = getheight();
-	int src_w = src->getwidth();				//图片宽高
-	int src_h = src->getheight();
+    // 变量初始化
+    DWORD* pwin = GetImageBuffer();			// 窗口缓冲区指针
+    DWORD* psrc = GetImageBuffer(src);		// 图片缓冲区指针
+    int win_w = getwidth();				// 窗口宽高
+    int win_h = getheight();
+    int src_w = src->getwidth();			// 图片宽高
+    int src_h = src->getheight();
 
+    // 计算贴图的实际长宽
+    int real_w = (x + dstW > win_w) ? win_w - x : dstW;	// 处理超出右边界
+    int real_h = (y + dstH > win_h) ? win_h - y : dstH;	// 处理超出下边界
+    if (x < 0) { psrc += -x;         real_w -= -x; x = 0; }	// 处理超出左边界
+    if (y < 0) { psrc += (dstW * -y); real_h -= -y; y = 0; }	// 处理超出上边界
 
-	// 计算贴图的实际长宽
-	int real_w = (x + dstW > win_w) ? win_w - x : dstW;			// 处理超出右边界
-	int real_h = (y + dstH > win_h) ? win_h - y : dstH;			// 处理超出下边界
-	if (x < 0) { psrc += -x;			real_w -= -x;	x = 0; }	// 处理超出左边界
-	if (y < 0) { psrc += (dstW * -y);	real_h -= -y;	y = 0; }	// 处理超出上边界
+    // 修正贴图起始位置
+    pwin += (win_w * y + x);
 
-	//printf("realw,h(%d,%d)\n", real_w, real_h);
-	// 修正贴图起始位置
-	pwin += (win_w * y + x);
-
-	// 实现透明贴图
-	for (int iy = 0; iy < real_h; iy++)
-	{
-		for (int ix = 0; ix < real_w; ix++)
-		{
-			byte a = (byte)(psrc[ix + srcX + srcY * src_w] >> 24);//计算透明通道的值[0,256) 0为完全透明 255为完全不透明
-			if (a > 100)
-			{
-				pwin[ix] = psrc[ix + srcX + srcY * src_w];
-			}
-		}
-		//换到下一行
-		pwin += win_w;
-		psrc += src_w;
-	}
+    // 实现透明贴图
+    for (int iy = 0; iy < real_h; iy++)
+    {
+        for (int ix = 0; ix < real_w; ix++)
+        {
+            byte a = (byte)(psrc[ix + srcX + srcY * src_w] >> 24);	// 计算透明通道值
+            if (a > 100)
+            {
+                pwin[ix] = psrc[ix + srcX + srcY * src_w];
+            }
+        }
+        pwin += win_w;	// 换到下一行
+        psrc += src_w;
+    }
 }
-'''
-## 难点与解决方案
-1. 只有角色单方向的动作精灵图，编辑图片只能改变整体图片的朝向
-	
-2. 角色并未与障碍物或敌人相接触，但是却判定游戏结束
-  解决方案：绘制相关的碰撞盒，可视化碰撞检测，通过调整碰撞盒的大小，进一步调整碰撞判定范围
-3. 使用srand((unsigned int)time(NULL))随机生成的平台并非真正的随机，在每次按R重新开始游戏时，都与上第一次运行程序的地图一样 
-  解决方案：时间戳加程序运行时间，增强随机性srand((unsigned int)time(NULL) + clock()) 这样能够每次按下R键重新开始时看见不同的地图                                                                                                                                                                                                                                              
+```
+
+---
+
+## 🙏 致谢
+
+- 感谢 [EasyX 图形库](https://easyx.cn/) 提供了便捷的图形绘制接口；
+- 感谢网上分享**透明贴图函数**的作者，让素材能完美地融入游戏场景。
+
+如果这个项目对你有帮助，欢迎 ⭐ Star、提 Issue 或一起贡献代码！
+
+---
+
+**祝你玩得开心，跑得越远！🏃💨**
